@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import Link from 'next/link';
+import Link from "next/link";
 
 import mysqlData from "../libs/mysqlData";
 import styles from "../styles/Home.module.css";
@@ -15,24 +15,32 @@ export default function Home({ countries }) {
       </Head>
 
       <main>
-        <h1 >
+        <h1>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
         {countries &&
           countries.map((country) => {
             return (
-              <div key={country.id}>
-                <Link href={`/country/${country.name}`}>
-                  <a>
-
-                <b>{country.name}</b>
-                  </a>
-                </Link>
-                <p>{country.region}</p>
-              </div>
+              <>
+                <div key={country.id}>
+                  <Link href={`/country/${country.name}`}>
+                    <a>
+                      <h2>{country.name}</h2>
+                    </a>
+                  </Link>
+                  <p>{country.region}</p>
+                </div>
+                <hr />
+              </>
             );
           })}
       </main>
+
+      <style jsx>{`
+        h2:hover {
+          text-decoration: underline;
+        }
+      `}</style>
 
       <footer className={styles.footer}>
         <a

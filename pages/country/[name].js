@@ -4,8 +4,10 @@ import mysqlData from "../../libs/mysqlData";
 const Country = ({ country }) => {
   return (
     <div>
+      <button onClick={() => history.back()}>Back</button>
       <h1>{country.name}</h1>
-      <span>{country.currency_name}</span>
+      <hr />
+      <pre>{JSON.stringify(country, null, 2)}</pre>
     </div>
   );
 };

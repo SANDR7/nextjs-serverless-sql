@@ -3,7 +3,7 @@ import sqlQuery from "../../libs/sqlQuery";
 const handler = async (_, res) => {
   try {
     const result = await sqlQuery.get(
-      "SELECT id, name, iso2, iso3, region, subregion, tld FROM countries ORDER BY name ASC LIMIT 10"
+      "SELECT id, name, iso2, iso3, region, subregion, tld FROM countries ORDER BY name ASC "
     );
 
     return res.status(200).json(result);

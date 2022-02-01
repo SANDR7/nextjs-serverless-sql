@@ -15,9 +15,9 @@ const Country = ({ country }) => {
 export const getStaticPaths = async () => {
   const names = await mysqlData.countries.all;
 
-  const paths = names.map((name) => {
+  const paths = names.map((country) => {
     return {
-      params: { name: name.name.toString() },
+      params: { name: country.name },
     };
   });
 

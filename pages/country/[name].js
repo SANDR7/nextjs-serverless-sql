@@ -1,41 +1,32 @@
 import React from "react";
-import mysqlData from "../../libs/mysqlData";
+import useSWR from "swr";
+import { useRouter } from "next/router";
+const fetcher = async (url) => {
+  const response = await fetch(url);
+  const data = await response.json();
 
-const Country = ({ country }) => {
+  return data;
+};
+const Country = () => {
+  const router = useRouter();
+  const { name } = router.query;
+
+  const { data, error } = useSWR(`/api/country/${name}`, fetcher);
+
+  console.log(data, error);
   return (
+      <>
+      <div>
+          <button onClick={() => history.back()}>Back</button>
+      </div>
     <div>
-      <button onClick={() => history.back()}>Back</button>
-      <h1>{country.name}</h1>
-      <hr />
-      <pre>{JSON.stringify(country, null, 2)}</pre>
+        <h1>{name}</h1>
+      <div>
+        <pre>{JSON.stringify(data?.data, null, 2)}</pre>
+      </div>
     </div>
+      </>
   );
-};
-
-export const getStaticPaths = async () => {
-  const names = await mysqlData.countries.all;
-
-  const paths = names.map((country) => {
-    return {
-      params: { name: country.name },
-    };
-  });
-
-  return {
-    paths: paths,
-    fallback: false,
-  };
-};
-export const getStaticProps = async (context) => {
-  let name = context.params.name;
-  let result = {};
-
-  const country = await mysqlData.countries.single(name);
-
-  result.country = country;
-  return {
-    props: result,
-  };
 };
 
 export default Country;

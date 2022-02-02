@@ -1,11 +1,25 @@
+import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import useSWR from 'swr';
+
+
 
 import mysqlData from "../libs/mysqlData";
 import styles from "../styles/Home.module.css";
 
-export default function Home({ countries }) {
+
+const fetcher = async () => {
+  const response  = await fetch('/api/countries');
+  const data = await response.json();
+
+  return data;
+}
+
+export default function Home() {
+ const {data, error} = useSWR('/', fetcher);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -18,8 +32,8 @@ export default function Home({ countries }) {
         <h1>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
-        {countries &&
-          countries.map((country) => {
+        {data &&
+          data.data.map((country) => {
             return (
               <>
                 <div key={country.id}>
@@ -58,13 +72,13 @@ export default function Home({ countries }) {
   );
 }
 
-export const getStaticProps = async (context) => {
-  let result = {};
+// export const getStaticProps = async (context) => {
+//   let result = {};
 
-  const countries = await mysqlData.countries.all;
+//   const countries = await mysqlData.countries.all;
 
-  result.countries = countries;
-  return {
-    props: result,
-  };
-};
+//   result.countries = countries;
+//   return {
+//     props: result,
+//   };
+// };

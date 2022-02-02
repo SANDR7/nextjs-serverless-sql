@@ -2,23 +2,14 @@ import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import useSWR from 'swr';
-
-
+import useSWR from "swr";
 
 import mysqlData from "../libs/mysqlData";
 import styles from "../styles/Home.module.css";
 
-
-const fetcher = async () => {
-  const response  = await fetch('/api/countries');
-  const data = await response.json();
-
-  return data;
-}
-
 export default function Home() {
- const {data, error} = useSWR('/', fetcher);
+  const fetcher = () => mysqlData.countries.all;
+  const { data: countries, error } = useSWR("/", fetcher);
 
   return (
     <div className={styles.container}>
@@ -32,11 +23,11 @@ export default function Home() {
         <h1>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
-        {data &&
-          data.data.map((country) => {
+        {countries &&
+          countries.data.map((country, idx) => {
             return (
               <>
-                <div key={country.id}>
+                <div key={idx}>
                   <Link href={`/country/${country.name}`}>
                     <a>
                       <h2>{country.name}</h2>
@@ -44,6 +35,7 @@ export default function Home() {
                   </Link>
                   <p>{country.region}</p>
                 </div>
+                <pre>{JSON.stringify(country, null, 2)}</pre>
                 <hr />
               </>
             );
